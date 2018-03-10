@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>问诊表</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" charset="utf-8" src="kindeditor-all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="lang/zh-CN.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script type="text/javascript" charset="utf-8" src="jquery.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css" />
+    <script type="text/javascript" src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
+   <script type="text/javascript" src="slide.js"></script>
+    <style>
+        body{
+            margin:0;
+            padding:5px;
+        }
+        /*滑动条*/
+        .myslider{
+            width: 175px;
+            height: 5px;
+           /* margin: 10px;*/
+            background-color: #FFFFE0;
+            border: 1px solid #A9C9E2;
+            position: relative;
+        }
+        .myslider .completed{
+            height: 3px;
+            background-color: #7d9edb;
+            top: 1px;
+            left: 1px;
+            position: absolute;
+        }
+        .myslider .slider{
+            height: 15px;
+            background-color: #E6E6FA;
+            border: 1px solid #A5B6C8;
+            top: -6px;
+            width: 4px;
+            display: block;
+            cursor: pointer;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar navbar-default">
+
+    <div style="text-align:center;"> <span style="font-size:36px;text-align:center;">问诊表 - 共享大夫</span >
+
+    </div>
+</div>
+<div><span style="font-size:20px; margin-left:40px;" class="text-muted">编辑问诊表</span><span class="text-muted" >(当前题量:
+  <span id="count"></span>题)</span>
+
+    <button  class="btn btn-primary" style="float:right;margin-right:20px;">提交</button>
+    <button  class="btn btn-primary" style="float:right;margin-right:20px;">暂存</button>
+
+    <div class="btn-group" style="float:right; margin-right:20px;">
+        <button class=" btn btn-primary dropdown-toggle" data-toggle="dropdown" id="addQuestion" >添加
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="javascript:void(0)" id="addSingle" >添加单选题</a></li>
+            <li><a href="javascript:void(0)" id="addMulti">添加多选题</a></li>
+            <li><a href="javascript:void(0)" id="addAsk">添加问答题</a></li>
+            <li><a href="javascript:void(0)" id="addSlide">添加滑块题</a></li>
+        </ul>
+    </div>
+</div>
+<!--题目-->
+<div style="margin-top:20px;margin-left:20px;padding:20px;" id="container">
+     <!--单选-->
+   <div id="single">
+        <span style="font-size:16px;" class="text-primary" >
+            <input value="1" readonly style="width:20px;height:20px;text-align: center;margin-right:3px;"/>[单选题]
+        </span>
+        <span>
+            <button style=" float:right;margin-right:20px;border-radius: 5px;"   type="button"  class="btn  btn-danger delbtn" data-id="1"> x</button>
+        </span>
+        <p >编辑标题信息</p>
+        <input placeholder="请输入标题信息"/>
+       <div>
+        <div>
+        <p style="margin-top:5px;"> 编辑选项内容</p>
+        <input placeholder="请输入选项内容"/><br/>
+        <input placeholder="请输入选项分数" style="margin-top:5px;"/>
+        </div>
+       </div>
+
+        <div style="margin-top:5px;">
+        <button class="btn btn-primary additem">添加选项</button>
+        <button class="btn btn-danger delitem">删除选项</button>
+        </div>
+
+    </div>
+    <!--多选-->
+    <div  style="margin-top:10px;">
+        <span style="font-size:16px;" class="text-primary" >
+              <input value="2" readonly style="width:20px;height:20px;text-align: center;margin-right:3px;"/>[多选题]
+        </span>
+        <span><button style=" float:right;margin-right:20px;border-radius: 5px;" class="btn  btn-danger delbtn"  data-id="2"> x</button></span>
+        <p >编辑标题信息</p>
+        <input placeholder="请输入标题信息"/>
+
+        <div>
+        <div>
+        <p style="margin-top:10px;"> 编辑选项内容</p>
+        <input placeholder="请输入选项内容"/><br/>
+        <input placeholder="请输入选项分数" style="margin-top:5px;"/>
+        </div>
+        </div>
+
+        <div style="margin-top:5px;">
+            <button class="btn btn-primary additem">添加选项</button>
+            <button class="btn btn-danger delitem">删除选项</button>
+        </div>
+
+    </div>
+    <!--问答题-->
+    <div style="margin-top:10px;">
+        <span style="font-size:16px;" class="text-primary" >
+              <input value="3" readonly style="width:20px;height:20px;text-align: center;margin-right:3px;"/>[问答题]
+        </span>
+        <span><button style=" float:right;margin-right:20px;border-radius: 5px;" class="btn  btn-danger delbtn"  data-id="3"> x</button></span>
+        <p >编辑标题信息</p>
+        <input placeholder="请输入标题信息"/>
+        <p style="margin-top:5px;"> 编辑问答题目</p>
+
+       <textarea rows="5" cols="22" placeholder=" 请输入题目内容"></textarea>
+
+    </div>
+    <!--滑块题-->;
+   <div style="margin-top:10px;" >
+        <span style="font-size:16px;" class="text-primary" >
+              <input value="4" readonly style="width:20px;height:20px;text-align: center;margin-right:3px;"/>[滑块题]</span>
+        <span><button style=" float:right;margin-right:20px;border-radius: 5px;" class=" btn btn-danger delbtn"> x</button></span>
+        <p >编辑标题信息</p>
+        <input placeholder="请输入标题信息"/><br/>
+        <div style="margin-top:10px;">
+            <button class="btn-default" onclick="cut1()"> -</button><input style="width:20px;text-align: center;" value="0" id="input1"/><button class="btn-default" onclick="add1()">+</button>
+            <button class="btn-default" style="margin-left:20px;" onclick="cut2()"> -</button><input style="width:20px;text-align: center;" value="0" id="input2" /><button class="btn-default" onclick="add2()">+</button>
+        </div>
+        <div id="myslider1"  style="margin-top:10px;"></div>
+
+    </div>
+
+</div>
+
+<div style="border:1px solid #e7e7e7;margin-top:20px;margin-left:40px;">
+    <p>当患者填写完成后，提示患者</p>
+    <p class="text-muted">感谢填写</p>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function (){
+        //  题量
+        var count1= $("#container").children("div").length;
+        $("#count").text(count1);
+
+        //删除题目按钮(委托)
+        $("#container").on('click','.delbtn',function(e){
+            e.preventDefault();
+            console.log(this);
+            $(this).parent().parent().remove();
+            Count();
+        });
+        //删除选项按钮
+        $("#container").on('click','.delitem',function(e){
+            e.preventDefault();
+            $(this).parent().prev().children().last().remove();
+            console.log(this);
+        });
+        // 添加选项按钮
+        $("#container").on('click','.additem',function(e){
+            e.preventDefault();
+            var itemHtml='<div>\n' +
+                '        <p style="margin-top:10px;"> 编辑选项内容</p>\n' +
+                '        <input placeholder="请输入选项内容"/><br/>\n' +
+                '        <input placeholder="请输入选项分数" style="margin-top:5px;"/>\n' +
+                '        </div>';
+            $(this).parent().prev().append(itemHtml);
+        });
+
+
+
+        //添加题型
+        $('#addSingle').on('click',function (e){
+            e.preventDefault();
+            var htmlSingle = '  <div id="single">\n' +
+                '        <span style="font-size:16px;" class="text-primary" >\n' +
+                '            <input value="1" readonly style="width:20px;height:20px;text-align: center;margin-right:3px;"/>[单选题]\n' +
+                '        </span>\n' +
+                '        <span>\n' +
+                '            <button style=" float:right;margin-right:20px;border-radius: 5px;"   type="button"  class="btn  btn-danger delbtn" data-id="1"> x</button>\n' +
+                '        </span>\n' +
+                '        <p >编辑标题信息</p>\n' +
+                '        <input placeholder="请输入标题信息"/>\n' +
+                '       <div>\n' +
+                '        <div>\n' +
+                '        <p style="margin-top:5px;"> 编辑选项内容</p>\n' +
+                '        <input placeholder="请输入选项内容"/><br/>\n' +
+                '        <input placeholder="请输入选项分数" style="margin-top:5px;"/>\n' +
+                '        </div>\n' +
+                '       </div>\n' +
+                '\n' +
+                '        <div style="margin-top:5px;">\n' +
+                '        <button class="btn btn-primary additem">添加选项</button>\n' +
+                '        <button class="btn btn-danger delitem">删除选项</button>\n' +
+                '        </div>\n' +
+                '\n' +
+                '    </div>';
+            $('#container').append(htmlSingle);
+           Count();
+            Index();
+
+
+
+
+        });
+        $("#addMulti").on('click',function(e){
+            e.preventDefault();
+            var htmlMulti=' <div  style="margin-top:10px;">\n' +
+                '        <span style="font-size:16px;" class="text-primary" >\n' +
+                '              <input value="2" readonly style="width:20px;height:20px;text-align: center;margin-right:3px;"/>[多选题]\n' +
+                '        </span>\n' +
+                '        <span><button style=" float:right;margin-right:20px;border-radius: 5px;" class="btn  btn-danger delbtn"  data-id="2"> x</button></span>\n' +
+                '        <p >编辑标题信息</p>\n' +
+                '        <input placeholder="请输入标题信息"/>\n' +
+                '\n' +
+                '        <div>\n' +
+                '        <div>\n' +
+                '        <p style="margin-top:10px;"> 编辑选项内容</p>\n' +
+                '        <input placeholder="请输入选项内容"/><br/>\n' +
+                '        <input placeholder="请输入选项分数" style="margin-top:5px;"/>\n' +
+                '        </div>\n' +
+                '        </div>\n' +
+                '\n' +
+                '        <div style="margin-top:5px;">\n' +
+                '            <button class="btn btn-primary additem">添加选项</button>\n' +
+                '            <button class="btn btn-danger delitem">删除选项</button>\n' +
+                '        </div>\n' +
+                '\n' +
+                '    </div>';
+            $("#container").append(htmlMulti);
+           Count();
+           Index();
+        });
+        $("#addAsk").on('click',function(e){
+            e.preventDefault();//阻止元素执行与事件关联的默认动作
+            var htmlAsk=' <div style="margin-top:10px;">\n' +
+                '        <span style="font-size:16px;" class="text-primary" >\n' +
+                '              <input value="3" readonly style="width:20px;height:20px;text-align: center;margin-right:3px;"/>[问答题]\n' +
+                '        </span>\n' +
+                '        <span><button style=" float:right;margin-right:20px;border-radius: 5px;" class="btn  btn-danger delbtn"  data-id="3"> x</button></span>\n' +
+                '        <p >编辑标题信息</p>\n' +
+                '        <input placeholder="请输入标题信息"/>\n' +
+                '        <p style="margin-top:5px;"> 编辑问答题目</p>\n' +
+                '\n' +
+                '       <textarea rows="5" cols="22" placeholder=" 请输入题目内容"></textarea>\n' +
+                '\n' +
+                '    </div>';
+            $("#container").append(htmlAsk);
+            Count();
+            Index();
+
+        });
+        $("#addSlide").on('click',function(e){
+            e.preventDefault();
+            var htmlSlide=' <div style="margin-top:10px;" >\n' +
+                '        <span style="font-size:16px;" class="text-primary" >\n' +
+                '              <input value="4" readonly style="width:20px;height:20px;text-align: center;margin-right:3px;"/>[滑块题]</span>\n' +
+                '        <span><button style=" float:right;margin-right:20px;border-radius: 5px;" class=" btn btn-danger delbtn"> x</button></span>\n' +
+                '        <p >编辑标题信息</p>\n' +
+                '        <input placeholder="请输入标题信息"/><br/>\n' +
+                '        <div style="margin-top:10px;">\n' +
+                '            <button class="btn-default" onclick="cut1()"> -</button><input style="width:20px;text-align: center;" value="0" id="input1"/><button class="btn-default" onclick="add1()">+</button>\n' +
+                '            <button class="btn-default" style="margin-left:20px;" onclick="cut2()"> -</button><input style="width:20px;text-align: center;" value="0" id="input2" /><button class="btn-default" onclick="add2()">+</button>\n' +
+                '        </div>\n' +
+                '        <div id="myslider1"  style="margin-top:10px;"></div>\n' +
+                '\n' +
+                '    </div>';
+            $("#container").append(htmlSlide);
+            Count();
+            Index();
+         /* alert( $("#container").children("div").length);*/
+            $('#myslider2').jSlider().setProcess(50);
+        });
+
+        //更新题量
+        function Count(){
+            var count1= $("#container").children("div").length;
+            $("#count").text(count1);
+        }
+        //序号
+        function Index() {
+            var index= $("#container").children("div").length;
+            $("#container").children().last().find("input:first-child").val(index);
+
+
+        }
+        // 滑动条
+        $('#myslider1').jSlider().setProcess(50);
+
+
+    });
+
+    function add1(){
+
+        var value=parseInt($("#input1").val())+1;
+        $("#input1").val(value);
+    }
+    function cut1(){
+        var val=$("#input1").val();
+        if(val>0) {
+            var value = parseInt($("#input1").val()) - 1;
+            $("#input1").val(value);
+        }
+    }
+    function add2(){
+
+        var value=parseInt($("#input2").val())+1;
+        $("#input2").val(value);
+    }
+    function cut2(){
+        var val=$("#input2").val();
+        if(val>0) {
+            var value = parseInt($("#input2").val()) - 1;
+            $("#input2").val(value);
+        }
+    }
+
+
+
+
+</script>
+
+
+</body>
+</html>
